@@ -12,3 +12,6 @@ class PCBUILD:
     def display_build(self):
         for component in self.components:
             print(component.display_info())
+
+    def show_components(self):
+        return self.components

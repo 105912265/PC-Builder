@@ -11,13 +11,12 @@ RAM1 = RAM("RAM1", "RIPJAWS", 100, "DDR4", 3600)
 SSD1 = Storage("SSD1", "SAMSUNG", 100, "SSD", 512)
 PSU1 = PSU("PSU1", "DEEPCOOL", 60, 500)
 
+parts = [CPU1, GPU1, RAM1, SSD1, PSU1]
+
 myPC = PCBUILD()
 
-myPC.add_component(CPU1)
-myPC.add_component(GPU1)
-myPC.add_component(RAM1)
-myPC.add_component(SSD1)
-myPC.add_component(PSU1)
+for part in parts:
+    myPC.add_component(part)
 
-print(PCBUILD.display_build(myPC))
-print(PCBUILD.total_price(myPC))
+myPC.display_build()
+print(myPC.total_price())
