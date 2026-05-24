@@ -53,6 +53,7 @@ if custom_build == "yes":
         print(f"{index}: {ram.display_info()}")
     index = int(input("Choose RAM index: "))
     user_build.add_component(ram_list[index])
+    selected_ram = ram_list[index]
 
     print("Choose Storage:")
     for index, storage in enumerate(storage_list):
@@ -61,7 +62,7 @@ if custom_build == "yes":
     user_build.add_component(storage_list[index])
 
     # show only motherboards compatible with selected CPU socket
-    compatible_mbs = [m for m in motherboard_list if m.socket == selected_cpu.socket]
+    compatible_mbs = [m for m in motherboard_list if m.socket == selected_cpu.socket and m.ram_type == selected_ram.ram_type]
     if not compatible_mbs:
         print("No motherboards match the selected CPU socket; showing all options.")
         compatible_mbs = motherboard_list
@@ -80,14 +81,19 @@ else:
     selected_cpu = build.choose_random_component(cpu_list)
     build.choose_random_component(gpu_list)
     build.choose_random_component(psu_list)
-    build.choose_random_component(ram_list)
+    selected_ram = build.choose_random_component(ram_list)
     build.choose_random_component(storage_list)
-    # pick a motherboard that matches the CPU socket when possible
-    compatible_mbs = [m for m in motherboard_list if selected_cpu and getattr(selected_cpu, 'socket', None) == getattr(m, 'socket', None)]
+    # pick a motherboard that matches the CPU socket and RAM type when possible
+    compatible_mbs = [m for m in motherboard_list if selected_cpu and getattr(selected_cpu, 'socket', None) == getattr(m, 'socket', None) and selected_ram and getattr(m, 'ram_type', None) == getattr(selected_ram, 'ram_type', None)]
     if compatible_mbs:
         build.choose_random_component(compatible_mbs)
     else:
-        build.choose_random_component(motherboard_list)
+        # fallback: try matching socket only
+        socket_match = [m for m in motherboard_list if selected_cpu and getattr(selected_cpu, 'socket', None) == getattr(m, 'socket', None)]
+        if socket_match:
+            build.choose_random_component(socket_match)
+        else:
+            build.choose_random_component(motherboard_list)
     print("\n")
     print("Random build selected:")
     build.display_build()
