@@ -5,10 +5,18 @@ from ram import RAM
 from storage import Storage
 from psu import PSU
 
-def read_files(file_path, object_type):
+def read_files(file_path, object_type, build_type):
     items = []
+    budget = ""
+    if build_type == 1:
+        budget = "cheap"
+    elif build_type == 2:
+        budget = "okay"
+    else:
+        budget = "expensive"
+
     with open(file_path, 'r', encoding='utf8') as file:
-        reader = csv.DictReader(file)
+        reader = csv.DictReader(file, skipinitialspace=True)
 
         for row in reader:
             if object_type is CPU:
@@ -24,6 +32,8 @@ def read_files(file_path, object_type):
             else:
                 raise ValueError(f"Unsupported object_type: {object_type}")
 
-            items.append(item)
+            build_value = row.get('build_type', '').strip().lower()
+            if build_value == budget:
+                items.append(item)
 
     return items
