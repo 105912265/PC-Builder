@@ -88,6 +88,7 @@ if custom_build == "yes":
     print("\nYour custom build:")
     user_build.display_build()
     print("Total price:", user_build.total_price())
+    user_build.save_build("builds/user_build.txt")
 else:
     #a random build it built
     build = PCBUILD()
@@ -133,4 +134,5 @@ else:
     print("\n")
     print("Total price:")
     print(build.total_price())
+    build.save_build("builds/random_build.txt")
     

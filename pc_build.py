@@ -30,5 +30,15 @@ class PCBUILD:
         for component in self.components:
             print(component.display_info())
 
+    def save_build(self, filename="output/build.txt"):
+        with open(filename, "w", encoding="utf8") as file:
+            file.write("PC Build Summary\n")
+            file.write("----------------\n")
+
+            for component in self.components:
+                file.write(component.display_info() + "\n")
+
+            file.write(f"\nTotal price: ${self.total_price()}\n")
+
     def show_components(self):
         return self.components
