@@ -1,0 +1,9 @@
+name,brand,price,cores,socket
+Ryzen 5 5600,AMD,180,6,AM4
+Ryzen 5 7600,AMD,320,6,AM5
+Ryzen 7 7700,AMD,450,8,AM5
+Ryzen 7 7800X3D,AMD,620,8,AM5
+Core i5-12400F,Intel,220,6,LGA1700
+Core i5-13400F,Intel,300,10,LGA1700
+Core i7-13700F,Intel,520,16,LGA1700
+Core i9-13900K,Intel,750,24,LGA1700

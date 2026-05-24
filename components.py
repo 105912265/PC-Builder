@@ -1,6 +1,7 @@
 
 class Components: 
     def __init__(self, name, brand, price):
+        self.components = []
         self.name = name
         self.brand = brand
         self.price = price

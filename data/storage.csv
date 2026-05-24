@@ -1,0 +1,7 @@
+name,brand,price,capacity_gb,type
+500GB SATA SSD,Crucial,55,500,SATA SSD
+1TB SATA SSD,Samsung,95,1000,SATA SSD
+1TB NVMe SSD,Kingston,120,1000,NVMe SSD
+2TB NVMe SSD,Crucial,210,2000,NVMe SSD
+2TB High-Speed NVMe SSD,Samsung,290,2000,NVMe SSD
+4TB NVMe SSD,Western Digital,520,4000,NVMe SSD
