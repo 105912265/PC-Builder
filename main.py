@@ -62,7 +62,7 @@ if custom_build == "yes":
     user_build.add_component(storage_list[index])
 
     # show only motherboards compatible with selected CPU socket
-    compatible_mbs = [m for m in motherboard_list if m.socket == selected_cpu.socket and m.ram_type == selected_ram.ram_type]
+    compatible_mbs = [m for m in motherboard_list if m.socket == selected_cpu.socket and m.ram_type == selected_ram.type]
     if not compatible_mbs:
         print("No motherboards match the selected CPU socket; showing all options.")
         compatible_mbs = motherboard_list
@@ -84,7 +84,7 @@ else:
     selected_ram = build.choose_random_component(ram_list)
     build.choose_random_component(storage_list)
     # pick a motherboard that matches the CPU socket and RAM type when possible
-    compatible_mbs = [m for m in motherboard_list if selected_cpu and getattr(selected_cpu, 'socket', None) == getattr(m, 'socket', None) and selected_ram and getattr(m, 'ram_type', None) == getattr(selected_ram, 'ram_type', None)]
+    compatible_mbs = [m for m in motherboard_list if selected_cpu and getattr(selected_cpu, 'socket', None) == getattr(m, 'socket', None) and selected_ram and getattr(m, 'ram_type', None) == getattr(selected_ram, 'type', None)]
     if compatible_mbs:
         build.choose_random_component(compatible_mbs)
     else:
