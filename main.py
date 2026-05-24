@@ -42,12 +42,6 @@ if custom_build == "yes":
     index = int(input("Choose GPU index: "))
     user_build.add_component(gpu_list[index])
 
-    print("Choose a PSU:")
-    for index, psu in enumerate(psu_list):
-        print(f"{index}: {psu.display_info()}")
-    index = int(input("Choose PSU index: "))
-    user_build.add_component(psu_list[index])
-
     print("Choose RAM:")
     for index, ram in enumerate(ram_list):
         print(f"{index}: {ram.display_info()}")
@@ -72,6 +66,12 @@ if custom_build == "yes":
         print(f"{index}: {motherboard.display_info()}")
     index = int(input("Choose Motherboard index: "))
     user_build.add_component(compatible_mbs[index])
+
+    print("Choose a PSU:")
+    for index, psu in enumerate(psu_list):
+        print(f"{index}: {psu.display_info()}")
+    index = int(input("Choose PSU index: "))
+    user_build.add_component(psu_list[index])
 
     print("\nYour custom build:")
     user_build.display_build()

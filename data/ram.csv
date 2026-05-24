@@ -1,8 +1,8 @@
-name,brand,price,capacity_gb,type,speed_mhz, build_type
-16GB DDR4 3200,Corsair,70,16,DDR4,3200, cheap
-16GB DDR4 3600,Kingston,85,16,DDR4,3600, cheap
-32GB DDR4 3600,Corsair,140,32,DDR4,3600, okay
-16GB DDR5 5200,Crucial,110,16,DDR5,5200, okay
-32GB DDR5 5600,Kingston,190,32,DDR5,5600, expensive
-32GB DDR5 6000,G.Skill,220,32,DDR5,6000, expensive
-64GB DDR5 6000,Corsair,390,64,DDR5,6000, expensive
+name,brand,price,capacity_gb,type,speed_mhz, build_type,wattage
+16GB DDR4 3200,Corsair,70,16,DDR4,3200, cheap,6
+16GB DDR4 3600,Kingston,85,16,DDR4,3600, cheap,6
+32GB DDR4 3600,Corsair,140,32,DDR4,3600, okay,10
+16GB DDR5 5200,Crucial,110,16,DDR5,5200, okay,8
+32GB DDR5 5600,Kingston,190,32,DDR5,5600, expensive,12
+32GB DDR5 6000,G.Skill,220,32,DDR5,6000, expensive,12
+64GB DDR5 6000,Corsair,390,64,DDR5,6000, expensive,20

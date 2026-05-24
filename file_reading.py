@@ -40,6 +40,10 @@ def read_files(file_path, object_type, build_type):
                 items.append(item)
                 continue
 
+            if object_type is PSU:
+                items.append(item)
+                continue
+
             build_value = row.get('build_type', '').strip().lower()
             if build_value == budget:
                 items.append(item)

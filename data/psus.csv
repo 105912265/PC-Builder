@@ -1,7 +1,7 @@
-name,brand,price,wattage, build_type
-550W Bronze,Cooler Master,80,550, cheap
-650W Bronze,Corsair,110,650, cheap
-750W Gold,EVGA,150,750, okay
-850W Gold,Corsair,190,850, expensive
-1000W Gold,Seasonic,280,1000, expensive
-1200W Platinum,be quiet!,390,1200, expensive
+name,brand,price,wattage
+550W Bronze,Cooler Master,80,550
+650W Bronze,Corsair,110,650
+750W Gold,EVGA,150,750
+850W Gold,Corsair,190,850
+1000W Gold,Seasonic,280,1000
+1200W Platinum,be quiet!,390,1200
