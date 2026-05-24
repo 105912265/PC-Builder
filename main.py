@@ -82,9 +82,9 @@ else:
     build = PCBUILD()
     selected_cpu = build.choose_random_component(cpu_list)
     build.choose_random_component(gpu_list)
-    build.choose_random_component(psu_list)
     selected_ram = build.choose_random_component(ram_list)
     build.choose_random_component(storage_list)
+
     # pick a motherboard that matches the CPU socket and RAM type when possible
     compatible_mbs = [m for m in motherboard_list if selected_cpu and getattr(selected_cpu, 'socket', None) == getattr(m, 'socket', None) and selected_ram and getattr(m, 'ram_type', None) == getattr(selected_ram, 'type', None)]
     if compatible_mbs:
@@ -96,9 +96,22 @@ else:
             build.choose_random_component(socket_match)
         else:
             build.choose_random_component(motherboard_list)
+
+
+    print("Total watts")
+    print(build.total_watts())
+    required_watts = build.total_watts()
+    suitable_psus = [psu for psu in psu_list if psu.wattage >= required_watts]
+    if suitable_psus:
+        selected_psu = suitable_psus[0]
+    else:
+        selected_psu = max(psu_list, key=lambda psu: psu.wattage)
+    build.add_component(selected_psu)
+
     print("\n")
     print("Random build selected:")
     build.display_build()
     print("\n")
     print("Total price:")
     print(build.total_price())
+    
