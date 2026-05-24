@@ -1,9 +1,9 @@
-from cpu import CPU
-from gpu import GPU
-from ram import RAM
-from storage import Storage
-from psu import PSU
-from motherboard import Motherboard
+from components.cpu import CPU
+from components.gpu import GPU
+from components.ram import RAM
+from components.storage import Storage
+from components.psu import PSU
+from components.motherboard import Motherboard
 from file_reading import read_files
 from pc_build import PCBUILD
 

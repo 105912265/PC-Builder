@@ -1,5 +1,5 @@
 
-from components import Components
+from components.components import Components
 
 class PSU(Components):
     def __init__(self, name, brand, price, watts):
