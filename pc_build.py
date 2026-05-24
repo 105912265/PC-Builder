@@ -8,8 +8,11 @@ class PCBUILD:
         self.components.append(components)
 
     def choose_random_component(self, component_list):
-        index = random.randrange(len(component_list))
-        self.add_component(component_list[index])
+        if not component_list:
+            return None
+        choice = random.choice(component_list)
+        self.add_component(choice)
+        return choice
 
     def total_price(self):
         return sum(component.price for component in self.components)
