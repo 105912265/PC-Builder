@@ -1,3 +1,4 @@
+import random
 
 class PCBUILD:
     def __init__(self):
@@ -5,6 +6,10 @@ class PCBUILD:
 
     def add_component(self, components):
         self.components.append(components)
+
+    def choose_random_component(self, component_list):
+        index = random.randrange(len(component_list))
+        self.add_component(component_list[index])
 
     def total_price(self):
         return sum(component.price for component in self.components)

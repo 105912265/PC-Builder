@@ -1,0 +1,8 @@
+name,brand,price,socket,ram_type,wifi
+B550M DS3H,Gigabyte,130,AM4,DDR4,No
+B550 Tomahawk,MSI,210,AM4,DDR4,No
+B650M Gaming WiFi,Gigabyte,240,AM5,DDR5,Yes
+B650 Tomahawk WiFi,MSI,330,AM5,DDR5,Yes
+Z790 Aorus Elite AX,Gigabyte,430,LGA1700,DDR5,Yes
+B660M Pro RS,ASRock,160,LGA1700,DDR4,No
+B760 Gaming Plus WiFi,MSI,260,LGA1700,DDR5,Yes
