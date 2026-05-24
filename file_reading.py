@@ -1,3 +1,7 @@
+#Author: Kshitij Kshirsagar
+#Filename: file_reading.py
+#Last edited: 24/05/2026
+
 import csv
 from components.cpu import CPU
 from components.gpu import GPU
@@ -6,6 +10,10 @@ from components.storage import Storage
 from components.psu import PSU
 from components.motherboard import Motherboard
 
+#read the various component files and assign the to a list
+#items[]: function returns the filtered component list as per user specification
+#total_wattage: program can list PSU with enough power for specs
+#budget: cheap, okay, or expensive build
 def read_files(file_path, object_type, build_type):
     items = []
     total_wattage = 0
@@ -18,7 +26,7 @@ def read_files(file_path, object_type, build_type):
         budget = "expensive"
 
     with open(file_path, 'r', encoding='utf8') as file:
-        reader = csv.DictReader(file, skipinitialspace=True)
+        reader = csv.DictReader(file, skipinitialspace=True) #skips headings
 
         for row in reader:
             if object_type is CPU:
@@ -41,15 +49,17 @@ def read_files(file_path, object_type, build_type):
             else:
                 raise ValueError(f"Unsupported object_type: {object_type}")
 
-            # Motherboards don't have build_type in the CSV; include all
+            # Motherboards are listed based on ram and cpu socket
             if object_type is Motherboard:
                 items.append(item)
                 continue
 
+            #PSUs are listed based on specs power requirements
             if object_type is PSU:
                 items.append(item)
                 continue
 
+            #other parts are listed absed on type of build (cheap, okay, or expensive)
             build_value = row.get('build_type', '').strip().lower()
             if build_value == budget:
                 items.append(item)

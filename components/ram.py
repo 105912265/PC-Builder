@@ -1,3 +1,6 @@
+#Author: Kshitij Kshirsagar
+#Filename: ram.py
+#Last edited: 24/05/2026
 
 from components.components import Components
 

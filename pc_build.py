@@ -1,5 +1,10 @@
+#Author: Kshitij Kshirsagar
+#Filename: pc_build.py
+#Last edited: 24/05/2026
+
 import random
 
+#consist of all parts needed for pc to function
 class PCBUILD:
     def __init__(self):
         self.components = []
@@ -7,6 +12,7 @@ class PCBUILD:
     def add_component(self, components):
         self.components.append(components)
 
+    #function to choose random component for random build
     def choose_random_component(self, component_list):
         if not component_list:
             return None

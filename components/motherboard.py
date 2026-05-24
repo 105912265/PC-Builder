@@ -1,3 +1,7 @@
+#Author: Kshitij Kshirsagar
+#Filename: motherboard.py
+#Last edited: 24/05/2026
+
 from components.components import Components
 
 class Motherboard(Components):

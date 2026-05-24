@@ -1,4 +1,7 @@
- 
+#Author: Kshitij Kshirsagar
+#Filename: gpu.py
+#Last edited: 24/05/2026
+
 from components.components import Components
 
 class GPU(Components):
