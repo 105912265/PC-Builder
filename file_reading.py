@@ -8,6 +8,7 @@ from components.motherboard import Motherboard
 
 def read_files(file_path, object_type, build_type):
     items = []
+    total_wattage = 0
     budget = ""
     if build_type == 1:
         budget = "cheap"
@@ -21,17 +22,22 @@ def read_files(file_path, object_type, build_type):
 
         for row in reader:
             if object_type is CPU:
-                item = CPU(row['name'], row['brand'], float(row['price']), int(row['cores']), row['socket'])
+                item = CPU(row['name'], row['brand'], float(row['price']), int(row['wattage']), int(row['cores']), row['socket'])
+                total_wattage += int(row['wattage'])
             elif object_type is GPU:
-                item = GPU(row['name'], row['brand'], float(row['price']), int(row['vram_gb']))
+                item = GPU(row['name'], row['brand'], float(row['price']), int(row['wattage']), int(row['vram_gb']))
+                total_wattage += int(row['wattage'])
             elif object_type is PSU:
                 item = PSU(row['name'], row['brand'], float(row['price']), int(row['wattage']))
             elif object_type is RAM:
-                item = RAM(row['name'], row['brand'], float(row['price']), int(row['capacity_gb']), row['type'], row['speed_mhz'])
+                item = RAM(row['name'], row['brand'], float(row['price']), int(row['wattage']), int(row['capacity_gb']), row['type'], row['speed_mhz'])
+                total_wattage += int(row['wattage'])
             elif object_type is Storage:
-                item = Storage(row['name'], row['brand'], float(row['price']), row['type'], int(row['capacity_gb']))
+                item = Storage(row['name'], row['brand'], float(row['price']), int(row['wattage']),row['type'], int(row['capacity_gb']))
+                total_wattage += int(row['wattage'])
             elif object_type is Motherboard:
-                item = Motherboard(row['name'], row['brand'], float(row['price']), row['socket'], row['ram_type'], row['wifi'])
+                item = Motherboard(row['name'], row['brand'], float(row['price']), int(row['wattage']), row['socket'], row['ram_type'], row['wifi'])
+                total_wattage += int(row['wattage'])
             else:
                 raise ValueError(f"Unsupported object_type: {object_type}")
 

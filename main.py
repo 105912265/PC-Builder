@@ -68,8 +68,10 @@ if custom_build == "yes":
     user_build.add_component(compatible_mbs[index])
 
     print("Choose a PSU:")
+    print(user_build.total_watts())
     for index, psu in enumerate(psu_list):
-        print(f"{index}: {psu.display_info()}")
+        if psu.wattage >= user_build.total_watts():
+            print(f"{index}: {psu.display_info()}")
     index = int(input("Choose PSU index: "))
     user_build.add_component(psu_list[index])
 

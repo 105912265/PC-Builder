@@ -16,6 +16,9 @@ class PCBUILD:
 
     def total_price(self):
         return sum(component.price for component in self.components)
+    
+    def total_watts(self):
+        return sum(component.wattage for component in self.components)
 
     def display_build(self):
         for component in self.components:
