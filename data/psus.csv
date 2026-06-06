@@ -1,7 +1,10 @@
-name,brand,price,wattage
-550W Bronze,Cooler Master,80,550
-650W Bronze,Corsair,110,650
-750W Gold,EVGA,150,750
-850W Gold,Corsair,190,850
-1000W Gold,Seasonic,280,1000
-1200W Platinum,be quiet!,390,1200
+name,price,wattage,efficiency
+Corsair CV550,79,550,80+ Bronze
+Cooler Master MWE 650 Bronze V2,109,650,80+ Bronze
+MSI MAG A650BN,99,650,80+ Bronze
+Corsair RM750e,159,750,80+ Gold
+MSI MAG A750GL PCIE5,169,750,80+ Gold
+Cooler Master MWE Gold 850 V2,179,850,80+ Gold
+MSI MAG A850GL PCIE5,189,850,80+ Gold
+Corsair RM1000x,259,1000,80+ Gold
+be quiet! Pure Power 12 M 1000W,249,1000,80+ Gold

@@ -1,17 +1,16 @@
 #Author: Kshitij Kshirsagar
 #Filename: ram.py
-#Last edited: 24/05/2026
+#Last edited: 06/06/2026
 
 from components.components import Components
 
 class RAM(Components):
-    def __init__(self, name, brand, price, wattage, capacity, type, frequency):
-        super().__init__(name, brand, price, wattage)
+    def __init__(self, name,price, wattage, size_gb, ram_type):
+        super().__init__(name, price, wattage)
         self.wattage = wattage
-        self.capacity = capacity
-        self.type = type
-        self.frequency = frequency
+        self.size_gb = size_gb
+        self.ram_type = ram_type
 
     def display_info(self):
-        return f"Brand: {self.brand}, Name: {self.name}, Price: {self.price}, Wattage: {self.wattage}, Capacity: {self.capacity}, Type: {self.type}, Frequency: {self.frequency}"
+        return f"Name: {self.name}, Price: {self.price}, Wattage: {self.wattage}, Capacity(GB): {self.size_gb}, Type: {self.ram_type}"
     

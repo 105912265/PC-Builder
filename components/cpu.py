@@ -6,7 +6,7 @@ from components.components import Components
 
 class CPU(Components):
     def __init__(self, name, price, cpu_mark, single_thread_score, wattage, power_perf, cores, socket):
-        super().__init__(name, price)
+        super().__init__(name, price, wattage)
         self.cpu_mark = cpu_mark
         self.single_thread_score = single_thread_score
         self.wattage = wattage

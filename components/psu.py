@@ -5,10 +5,11 @@
 from components.components import Components
 
 class PSU(Components):
-    def __init__(self, name, brand, price, wattage):
-        super().__init__(name, brand, price, wattage)
+    def __init__(self, name, price, wattage, efficiency):
+        super().__init__(name, price, wattage)
         self.wattage = wattage
+        self.efficiency = efficiency
 
     def display_info(self):
-        return f"Brand: {self.brand}, Name: {self.name}, Price: {self.price}, Watts: {self.wattage}"
+        return f"Name: {self.name}, Price: {self.price}, Watts: {self.wattage}, Efficiency: {self.efficiency}"
     

@@ -6,7 +6,7 @@ from components.components import Components
 
 class GPU(Components):
     def __init__(self, name, price, g3d_mark, g2d_mark, wattage, power_perf):
-        super().__init__(name, price)
+        super().__init__(name, price, wattage)
         self.g3d_mark = g3d_mark
         self.g2d_mark = g2d_mark
         self.wattage = wattage

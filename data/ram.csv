@@ -1,8 +1,11 @@
-name,brand,price,capacity_gb,type,speed_mhz, build_type,wattage
-16GB DDR4 3200,Corsair,70,16,DDR4,3200, cheap,6
-16GB DDR4 3600,Kingston,85,16,DDR4,3600, cheap,6
-32GB DDR4 3600,Corsair,140,32,DDR4,3600, okay,10
-16GB DDR5 5200,Crucial,110,16,DDR5,5200, okay,8
-32GB DDR5 5600,Kingston,190,32,DDR5,5600, expensive,12
-32GB DDR5 6000,G.Skill,220,32,DDR5,6000, expensive,12
-64GB DDR5 6000,Corsair,390,64,DDR5,6000, expensive,20
+name,price,wattage,size_gb,ram_type
+Corsair Vengeance LPX 16GB DDR4,55,8,16,DDR4
+Kingston Fury Beast 16GB DDR4,59,8,16,DDR4
+Corsair Vengeance LPX 32GB DDR4,95,10,32,DDR4
+G.Skill Ripjaws V 32GB DDR4,99,10,32,DDR4
+Kingston Fury Beast 64GB DDR4,189,15,64,DDR4
+Corsair Vengeance 16GB DDR5,75,8,16,DDR5
+Kingston Fury Beast 16GB DDR5,79,8,16,DDR5
+Corsair Vengeance 32GB DDR5,139,10,32,DDR5
+G.Skill Flare X5 32GB DDR5,149,10,32,DDR5
+Kingston Fury Beast 64GB DDR5,269,15,64,DDR5
