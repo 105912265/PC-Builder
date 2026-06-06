@@ -1,18 +1,29 @@
 #Author: Kshitij Kshirsagar
 #Filename: cpu.py
-#Last edited: 24/05/2026
+#Last edited: 06/06/2026
 
 from components.components import Components
 
 class CPU(Components):
-    def __init__(self, name, brand, price, wattage, cores, socket):
-        super().__init__(name, brand, price, wattage)
+    def __init__(self, name, price, cpu_mark, single_thread_score, wattage, power_perf, cores, socket):
+        super().__init__(name, price)
+        self.cpu_mark = cpu_mark
+        self.single_thread_score = single_thread_score
         self.wattage = wattage
+        self.power_perf = power_perf
         self.cores = cores
         self.socket = socket
 
     def display_info(self):
-        return f"Brand: {self.brand}, Name: {self.name}, Price: {self.price}, Wattage: {self.wattage}, Cores: {self.cores}, Socket: {self.socket}"
-    
+        return (
+            f"Name: {self.name}, "
+            f"Price: ${self.price}, "
+            f"Wattage: {self.wattage}W, "
+            f"CPU Mark: {self.cpu_mark}, "
+            f"Single Thread Score: {self.single_thread_score}, "
+            f"Power Performance: {self.power_perf}, "
+            f"Cores: {self.cores}, "
+            f"Socket: {self.socket}"
+        )  
 
 

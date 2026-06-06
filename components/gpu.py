@@ -1,16 +1,23 @@
 #Author: Kshitij Kshirsagar
 #Filename: gpu.py
-#Last edited: 24/05/2026
+#Last edited: 06/06/2026
 
 from components.components import Components
 
 class GPU(Components):
-    def __init__(self, name, brand, price, wattage, vram):
-        super().__init__(name, brand, price, wattage)
+    def __init__(self, name, price, g3d_mark, g2d_mark, wattage, power_perf):
+        super().__init__(name, price)
+        self.g3d_mark = g3d_mark
+        self.g2d_mark = g2d_mark
         self.wattage = wattage
-        self.vram = vram
+        self.power_perf = power_perf
 
     def display_info(self):
-        #return super().display_info() #runs display_info function off parent
-        return f"Brand: {self.brand}, Name: {self.name}, Price: {self.price}, Wattage: {self.wattage}, VRAM: {self.vram}"
-    
+        return (
+            f"Name: {self.name}, "
+            f"Price: ${self.price}, "
+            f"Wattage: {self.wattage}W, "
+            f"G3D Mark: {self.g3d_mark}, "
+            f"G2D Mark: {self.g2d_mark}, "
+            f"Power Efficiency: {self.power_perf}"
+        )
