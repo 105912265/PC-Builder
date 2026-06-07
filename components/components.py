@@ -1,6 +1,6 @@
 #Author: Kshitij Kshirsagar
 #Filename: components.py
-#Last edited: 24/05/2026
+#Last edited: 07/06/2026
 
 class Components: 
     def __init__(self, name, price, wattage):
