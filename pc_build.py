@@ -38,7 +38,7 @@ class PCBUILD:
             for component in self.components:
                 file.write(component.display_info() + "\n")
 
-            file.write(f"\nTotal price: ${self.total_price()}\n")
+            
 
     def show_components(self):
         return self.components
