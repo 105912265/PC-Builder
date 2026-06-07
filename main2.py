@@ -1,9 +1,19 @@
-#Author: Kshitij Kshirsagar
-#Filename: main2.py
-#Last edited: 07/06/2026
+# Author: Kshitij Kshirsagar
+# Filename: main2.py
+# Last edited: 07/06/2026
 
-from src.data_loader import load_cpus, load_gpus, load_motherboards, load_psu, load_ram, load_storage
-from src.compatibility_checker import is_build_compatible, calculate_total_price, calculate_total_wattage
+import csv
+
+from src.data_loader import (
+    load_cpus,
+    load_gpus,
+    load_motherboards,
+    load_psu,
+    load_ram,
+    load_storage
+)
+
+from src.build_generator import generate_compatible_builds
 
 
 cpus = load_cpus("data/cpu_bench.csv")
@@ -13,16 +23,55 @@ psus = load_psu("data/psus.csv")
 motherboards = load_motherboards("data/motherboards.csv")
 storages = load_storage("data/storage.csv")
 
-budget = 3000
+budget = float(input("What is your budget? "))
 
-print(cpus[0].display_info())
-print(gpus[0].display_info())
-print(motherboards[0].display_info())
-print(rams[0].display_info())
-print(storages[0].display_info())
-print(psus[0].display_info())
+builds = generate_compatible_builds(
+    cpus,
+    gpus,
+    motherboards,
+    rams,
+    storages,
+    psus,
+    budget,
+    cpu_limit=40,
+    gpu_limit=40,
+    ram_limit=3,
+    storage_limit=3,
+    budget_gap=300
+)
 
-print(calculate_total_wattage(cpus[0], gpus[0], motherboards[0], rams[0], storages[0]))
-print(calculate_total_price(cpus[0], gpus[0], motherboards[0], rams[0], storages[0], psus[0]), f"Budget: {budget}")
-print(is_build_compatible(cpus[0], gpus[0], motherboards[0], rams[0], storages[0], psus[3], budget))
+print(f"Compatible builds found: {len(builds)}")
 
+if len(builds) > 0:
+    print("\nFirst build:")
+    print(builds[0].display_build())
+
+with open("builds.csv", "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+
+    writer.writerow([
+        "CPU",
+        "GPU",
+        "Motherboard",
+        "RAM",
+        "Storage",
+        "PSU",
+        "Total Price",
+        "Total Wattage"
+    ])
+
+    for build in builds:
+        components = build.show_components()
+
+        writer.writerow([
+            components[0].name,
+            components[1].name,
+            components[2].name,
+            components[3].name,
+            components[4].name,
+            components[5].name,
+            build.total_price(),
+            build.total_watts()
+        ])
+
+print("Builds saved to builds.csv")

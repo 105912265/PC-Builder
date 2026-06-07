@@ -1,10 +1,10 @@
-#Author: Kshitij Kshirsagar
-#Filename: pc_build.py
-#Last edited: 24/05/2026
+# Author: Kshitij Kshirsagar
+# Filename: pc_build.py
+# Last edited: 07/06/2026
 
 import random
 
-#consist of all parts needed for pc to function
+# consist of all parts needed for pc to function
 class PCBUILD:
     def __init__(self):
         self.components = []
@@ -12,10 +12,11 @@ class PCBUILD:
     def add_component(self, components):
         self.components.append(components)
 
-    #function to choose random component for random build
+    # function to choose random component for random build
     def choose_random_component(self, component_list):
         if not component_list:
             return None
+
         choice = random.choice(component_list)
         self.add_component(choice)
         return choice
@@ -27,8 +28,7 @@ class PCBUILD:
         return sum(component.wattage for component in self.components)
 
     def display_build(self):
-        for component in self.components:
-            print(component.display_info())
+        return "\n".join(component.display_info() for component in self.components)
 
     def save_build(self, filename="output/build.txt"):
         with open(filename, "w", encoding="utf8") as file:
@@ -39,6 +39,7 @@ class PCBUILD:
                 file.write(component.display_info() + "\n")
 
             file.write(f"\nTotal price: ${self.total_price()}\n")
+            file.write(f"Total wattage: {self.total_watts()}W\n")
 
     def show_components(self):
         return self.components
