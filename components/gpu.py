@@ -14,7 +14,7 @@ class GPU(Components):
 
     def display_info(self):
         return (
-            f"Name: {self.name}, "
+            f"GPU_Name: {self.name}, "
             f"Price: ${self.price}, "
             f"Wattage: {self.wattage}W, "
             f"G3D Mark: {self.g3d_mark}, "

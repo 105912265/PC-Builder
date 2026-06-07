@@ -13,7 +13,7 @@ class Storage(Components):
 
     def display_info(self):
         return (
-            f"Name: {self.name}, "
+            f"Storage_Name: {self.name}, "
             f"Price: ${self.price}, "
             f"Wattage: {self.wattage}W, "
             f"Capacity: {self.capacity_gb}GB, "

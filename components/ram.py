@@ -13,7 +13,7 @@ class RAM(Components):
 
     def display_info(self):
         return (
-            f"Name: {self.name}, "
+            f"RAM_Name: {self.name}, "
             f"Price: ${self.price}, "
             f"Wattage: {self.wattage}W, "
             f"Size: {self.size_gb}GB, "

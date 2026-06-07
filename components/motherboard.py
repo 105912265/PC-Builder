@@ -13,7 +13,7 @@ class Motherboard(Components):
 
     def display_info(self):
         return (
-            f"Name: {self.name}, "
+            f"Motherboad_Name: {self.name}, "
             f"Price: ${self.price}, "
             f"Wattage: {self.wattage}W, "
             f"Socket: {self.socket}, "

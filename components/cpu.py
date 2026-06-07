@@ -16,7 +16,7 @@ class CPU(Components):
 
     def display_info(self):
         return (
-            f"Name: {self.name}, "
+            f"CPU_Name: {self.name}, "
             f"Price: ${self.price}, "
             f"Wattage: {self.wattage}W, "
             f"CPU Mark: {self.cpu_mark}, "

@@ -21,9 +21,9 @@ def load_cpus(file_path):
             cpu = CPU(
                 row["name"],
                 float(row["price"]),
-                int(float(row["wattage"])),
                 int(float(row["cpu_mark"])),
                 int(float(row["single_thread_score"])),
+                int(float(row["wattage"])),
                 float(row["power_perf"]),
                 int(float(row["cores"])),
                 row["socket"]
@@ -44,9 +44,9 @@ def load_gpus(file_path):
             gpu = GPU(
                 row["name"],
                 float(row["price"]),
-                int(float(row["wattage"])),
                 int(float(row["g3d_mark"])),
                 int(float(row["g2d_mark"])),
+                int(float(row["wattage"])),
                 float(row["power_perf"])
             )
 
