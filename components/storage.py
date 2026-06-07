@@ -4,13 +4,19 @@
 
 from components.components import Components
 
+
 class Storage(Components):
     def __init__(self, name, price, wattage, capacity_gb, storage_type):
         super().__init__(name, price, wattage)
-        self.wattage = wattage
         self.capacity_gb = capacity_gb
         self.storage_type = storage_type
-        
+
     def display_info(self):
-        return f"Name: {self.name}, Price: {self.price}, Wattage: {self.wattage}, Capacity(GB): {self.capacity_gb}, Type: {self.storage_type}"
+        return (
+            f"Name: {self.name}, "
+            f"Price: ${self.price}, "
+            f"Wattage: {self.wattage}W, "
+            f"Capacity: {self.capacity_gb}GB, "
+            f"Type: {self.storage_type}"
+        )
     
