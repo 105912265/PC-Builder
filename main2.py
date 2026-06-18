@@ -14,6 +14,7 @@ from src.data_loader import (
 )
 
 from src.build_generator import generate_compatible_builds
+from src.build_labeler import label_builds
 
 
 cpus = load_cpus("data/cpu_bench.csv")
@@ -42,9 +43,9 @@ builds = generate_compatible_builds(
 
 print(f"Compatible builds found: {len(builds)}")
 
-if len(builds) > 0:
-    print("\nFirst build:")
-    print(builds[0].display_build())
+#if len(builds) > 0:
+ #   print("\nFirst build:")
+  #  print(builds[0].display_build())
 
 with open("builds.csv", "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
@@ -74,4 +75,13 @@ with open("builds.csv", "w", newline="", encoding="utf-8") as f:
             build.total_watts()
         ])
 
-print("Builds saved to builds.csv")
+#print("Builds saved to builds.csv")
+
+labelled_builds = label_builds(builds, "gaming")
+
+for item in labelled_builds[:5]:
+    print(item["build"].display_build())
+    print(item["build"].total_price())
+    print("Score:", item["score"])
+    print("Label:", item["label"])
+    print("----------------")
