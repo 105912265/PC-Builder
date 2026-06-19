@@ -1,191 +1,260 @@
 # Author: Kshitij Kshirsagar
 # Filename: build_generator.py
-# Last edited: 07/06/2026
+# Last edited: 19/06/2026
 
-from pc_build import PCBUILD
-from src.compatibility_checker import calculate_total_wattage
+from src.compatibility_checker import (
+    calculate_total_wattage,
+    is_psu_compatible,
+    normalise_socket
+)
 
 
-def cpu_score(cpu, budget):
+def cpu_matches_preference(cpu, preferred_brand):
     """
-    used to score CPUs based on both performance and value
+    used to check whether a CPU matches the user's brand preference
     :param cpu: CPU object
-    :param budget: user budget
-    :return score: weighted CPU score
+    :param preferred_brand: AMD, Intel or Any
+    :return: Boolean value showing whether the CPU matches
+    """
+    if preferred_brand == "Any":
+        return True
+
+    cpu_name = cpu.name.upper()
+
+    if preferred_brand == "AMD":
+        return "AMD" in cpu_name or "RYZEN" in cpu_name
+
+    if preferred_brand == "Intel":
+        return "INTEL" in cpu_name or "CORE" in cpu_name
+
+    return False
+
+
+def gpu_matches_preference(gpu, preferred_brand):
+    """
+    used to check whether a GPU matches the user's brand preference
+    :param gpu: GPU object
+    :param preferred_brand: NVIDIA, Radeon or Any
+    :return: Boolean value showing whether the GPU matches
+    """
+    if preferred_brand == "Any":
+        return True
+
+    gpu_name = gpu.name.upper()
+
+    if preferred_brand == "NVIDIA":
+        return (
+            "NVIDIA" in gpu_name
+            or "GEFORCE" in gpu_name
+            or "RTX" in gpu_name
+            or "GTX" in gpu_name
+        )
+
+    if preferred_brand == "Radeon":
+        return (
+            "RADEON" in gpu_name
+            or gpu_name.startswith("RX ")
+            or "AMD RADEON" in gpu_name
+        )
+
+    return False
+
+
+def cpu_score(cpu):
+    """
+    used to calculate the CPU's performance and value score
+    :param cpu: CPU object
+    :return: combined CPU score
     """
     value_score = cpu.cpu_mark / cpu.price
-    performance_score = cpu.cpu_mark
 
-    if budget >= 2500:
-        return performance_score * 0.75 + value_score * 500 * 0.25
-    else:
-        return performance_score * 0.40 + value_score * 500 * 0.60
+    return (
+        cpu.cpu_mark * 0.80
+        + cpu.single_thread_score * 0.15
+        + value_score * 100 * 0.05
+    )
 
 
-def gpu_score(gpu, budget):
+def gpu_score(gpu):
     """
-    used to score GPUs based on both performance and value
+    used to calculate the GPU's performance and value score
     :param gpu: GPU object
-    :param budget: user budget
-    :return score: weighted GPU score
+    :return: combined GPU score
     """
     value_score = gpu.g3d_mark / gpu.price
-    performance_score = gpu.g3d_mark
 
-    if budget >= 2500:
-        return performance_score * 0.80 + value_score * 500 * 0.20
-    else:
-        return performance_score * 0.45 + value_score * 500 * 0.55
+    return (
+        gpu.g3d_mark * 0.90
+        + gpu.g2d_mark * 0.05
+        + value_score * 100 * 0.05
+    )
 
 
-def choose_top_cpus(cpus, budget, limit=60):
+def choose_top_cpus(
+    cpus,
+    budget,
+    preferred_brand="Any",
+    limit=40
+):
     """
-    used to choose the best CPU candidates before generating builds
+    used to choose strong CPU candidates matching user preferences
     :param cpus: list of CPU objects
     :param budget: user budget
-    :param limit: maximum number of CPUs to keep
-    :return affordable_cpus: list of selected CPU objects
+    :param preferred_brand: AMD, Intel or Any
+    :param limit: maximum number of CPUs returned
+    :return candidates: ranked CPU candidate list
     """
-    affordable_cpus = [
-        cpu for cpu in cpus
-        if cpu.price <= budget * 0.40
+    candidates = [
+        cpu
+        for cpu in cpus
+        if cpu.price <= budget * 0.35
+        and cpu_matches_preference(cpu, preferred_brand)
     ]
 
-    affordable_cpus.sort(
-        key=lambda cpu: cpu_score(cpu, budget),
+    candidates.sort(
+        key=cpu_score,
         reverse=True
     )
 
-    return affordable_cpus[:limit]
+    return candidates[:limit]
 
 
-def choose_top_gpus(gpus, budget, limit=60):
+def choose_top_gpus(
+    gpus,
+    budget,
+    preferred_brand="Any",
+    limit=40
+):
     """
-    used to choose the best GPU candidates before generating builds
+    used to choose strong GPU candidates matching user preferences
     :param gpus: list of GPU objects
     :param budget: user budget
-    :param limit: maximum number of GPUs to keep
-    :return affordable_gpus: list of selected GPU objects
+    :param preferred_brand: NVIDIA, Radeon or Any
+    :param limit: maximum number of GPUs returned
+    :return candidates: ranked GPU candidate list
     """
-    affordable_gpus = [
-        gpu for gpu in gpus
-        if gpu.price <= budget * 0.70
+    candidates = [
+        gpu
+        for gpu in gpus
+        if gpu.price <= budget * 0.65
+        and gpu_matches_preference(gpu, preferred_brand)
     ]
 
-    affordable_gpus.sort(
-        key=lambda gpu: gpu_score(gpu, budget),
+    candidates.sort(
+        key=gpu_score,
         reverse=True
     )
 
-    return affordable_gpus[:limit]
+    return candidates[:limit]
 
 
-def choose_top_motherboards(cpu, motherboards, limit=3):
+def find_supporting_packages(
+    cpu,
+    motherboards,
+    ram_list,
+    storage_list,
+    limit=20
+):
     """
-    used to choose compatible motherboards for a CPU
+    used to create compatible motherboard, RAM and storage packages
     :param cpu: CPU object
     :param motherboards: list of motherboard objects
-    :param limit: maximum number of motherboards to keep
-    :return matching_motherboards: list of compatible motherboard objects
-    """
-    matching_motherboards = [
-        motherboard for motherboard in motherboards
-        if motherboard.socket == cpu.socket
-    ]
-
-    matching_motherboards.sort(key=lambda motherboard: motherboard.price)
-
-    return matching_motherboards[:limit]
-
-
-def choose_top_ram(motherboard, ram_list, limit=4):
-    """
-    used to choose compatible RAM for a motherboard
-    :param motherboard: motherboard object
     :param ram_list: list of RAM objects
-    :param limit: maximum number of RAM options to keep
-    :return matching_ram: list of compatible RAM objects
+    :param storage_list: list of storage objects
+    :param limit: maximum number of packages returned
+    :return packages: compatible supporting component packages
     """
-    matching_ram = [
-        ram for ram in ram_list
-        if ram.ram_type == motherboard.ram_type
+    packages = []
+
+    compatible_motherboards = [
+        motherboard
+        for motherboard in motherboards
+        if normalise_socket(motherboard.socket)
+        == normalise_socket(cpu.socket)
     ]
 
-    matching_ram.sort(
-        key=lambda ram: ram.size_gb / ram.price,
-        reverse=True
+    for motherboard in compatible_motherboards:
+        compatible_ram = [
+            ram
+            for ram in ram_list
+            if ram.ram_type == motherboard.ram_type
+        ]
+
+        for ram in compatible_ram:
+            for storage in storage_list:
+                package_price = (
+                    motherboard.price
+                    + ram.price
+                    + storage.price
+                )
+
+                packages.append({
+                    "motherboard": motherboard,
+                    "ram": ram,
+                    "storage": storage,
+                    "price": package_price
+                })
+
+    packages.sort(
+        key=lambda package: package["price"]
     )
 
-    return matching_ram[:limit]
+    return packages[:limit]
 
 
-def choose_top_storage(storage_list, limit=4):
+def choose_best_psu(
+    cpu,
+    gpu,
+    motherboard,
+    ram,
+    storage,
+    psus
+):
     """
-    used to choose storage options based on capacity per dollar
-    :param storage_list: list of storage objects
-    :param limit: maximum number of storage options to keep
-    :return storage_list: list of selected storage objects
+    used to choose the cheapest PSU that safely powers a complete build
+    :return: valid PSU object or None
     """
-    storage_list.sort(
-        key=lambda storage: storage.capacity_gb / storage.price,
-        reverse=True
+    total_wattage = calculate_total_wattage(
+        cpu,
+        gpu,
+        motherboard,
+        ram,
+        storage
     )
-
-    return storage_list[:limit]
-
-
-def choose_valid_psus(total_wattage, psus, limit=3):
-    """
-    used to choose valid PSUs for the build wattage
-    :param total_wattage: wattage of CPU, GPU, motherboard, RAM and storage
-    :param psus: list of PSU objects
-    :param limit: maximum number of PSU options to keep
-    :return valid_psus: list of PSU objects that can power the build
-    """
-    required_wattage = total_wattage * 1.3
 
     valid_psus = [
-        psu for psu in psus
-        if psu.wattage >= required_wattage
+        psu
+        for psu in psus
+        if is_psu_compatible(total_wattage, psu)
     ]
 
-    valid_psus.sort(key=lambda psu: psu.price)
+    if not valid_psus:
+        return None
 
-    return valid_psus[:limit]
+    valid_psus.sort(
+        key=lambda psu: (
+            psu.price,
+            psu.wattage
+        )
+    )
+
+    return valid_psus[0]
 
 
-def calculate_build_price(cpu, gpu, motherboard, ram, storage, psu):
+def calculate_candidate_score(cpu, gpu):
     """
-    used to calculate total build price
-    :return total_price: total price of all selected components
+    used to calculate the performance score of a CPU and GPU pair
+    :param cpu: CPU object
+    :param gpu: GPU object
+    :return: combined core performance score
     """
     return (
-        cpu.price
-        + gpu.price
-        + motherboard.price
-        + ram.price
-        + storage.price
-        + psu.price
+        cpu_score(cpu) * 0.30
+        + gpu_score(gpu) * 0.70
     )
 
 
-def is_build_in_budget_range(total_price, budget, budget_gap=None):
-    """
-    used to recommend if price of build is within budget range
-    :param total_price: total price of build calculated from 'def calculate_build_price'
-    :param budget: budget of build based on user input
-    :param budget_gap: how much cheaper than the budget the recommended build can be
-    :return: Boolean value of whether price of build is valid
-    """
-    if budget_gap is None:
-        budget_gap = max(300, budget * 0.30)
-
-    minimum_price = max(0, budget - budget_gap)
-
-    return minimum_price <= total_price <= budget
-
-
-def generate_compatible_builds(
+def generate_candidate_builds(
     cpus,
     gpus,
     motherboards,
@@ -193,87 +262,321 @@ def generate_compatible_builds(
     storage_list,
     psus,
     budget,
-    cpu_limit=60,
-    gpu_limit=60,
-    motherboard_limit=3,
-    ram_limit=4,
-    storage_limit=4,
-    psu_limit=3,
-    budget_gap=None
+    preferred_cpu_brand="Any",
+    preferred_gpu_brand="Any",
+    cpu_limit=40,
+    gpu_limit=40
 ):
     """
-    used to generate compatible PC builds based on user budget and component compatibility
-    :param cpus: list of CPU objects loaded from CPU benchmark data
-    :param gpus: list of GPU objects loaded from GPU benchmark data
-    :param motherboards: list of motherboard objects used to match CPU socket and RAM type
-    :param ram_list: list of RAM objects used to match motherboard RAM type
-    :param storage_list: list of storage objects used for build storage options
-    :param psus: list of PSU objects used to find power supplies that support total wattage
-    :param budget: maximum budget entered by the user
-    :param cpu_limit: maximum number of CPU options selected
-    :param gpu_limit: maximum number of GPU options selected
-    :param motherboard_limit: maximum number of compatible motherboards selected per CPU
-    :param ram_limit: maximum number of RAM options selected per motherboard
-    :param storage_limit: maximum number of storage options selected
-    :param psu_limit: maximum number of valid PSU options selected per build
-    :param budget_gap: how much cheaper than the budget the recommended build can be
-    :return compatible_builds: list of valid PCBUILD objects
+    used to generate complete candidate builds before selecting three recommendations
+    :return candidates: list of complete candidate build dictionaries
     """
-    compatible_builds = []
+    candidates = []
 
-    top_cpus = choose_top_cpus(cpus, budget, cpu_limit)
-    top_gpus = choose_top_gpus(gpus, budget, gpu_limit)
-    top_storage = choose_top_storage(storage_list, storage_limit)
+    selected_cpus = choose_top_cpus(
+        cpus,
+        budget,
+        preferred_cpu_brand,
+        cpu_limit
+    )
 
-    for cpu in top_cpus:
-        top_motherboards = choose_top_motherboards(cpu, motherboards, motherboard_limit)
+    selected_gpus = choose_top_gpus(
+        gpus,
+        budget,
+        preferred_gpu_brand,
+        gpu_limit
+    )
 
-        if not top_motherboards:
-            continue
+    for cpu in selected_cpus:
+        supporting_packages = find_supporting_packages(
+            cpu,
+            motherboards,
+            ram_list,
+            storage_list
+        )
 
-        for motherboard in top_motherboards:
-            top_ram = choose_top_ram(motherboard, ram_list, ram_limit)
+        for gpu in selected_gpus:
+            for package in supporting_packages:
+                motherboard = package["motherboard"]
+                ram = package["ram"]
+                storage = package["storage"]
 
-            if not top_ram:
-                continue
+                psu = choose_best_psu(
+                    cpu,
+                    gpu,
+                    motherboard,
+                    ram,
+                    storage,
+                    psus
+                )
 
-            for ram in top_ram:
-                for storage in top_storage:
-                    for gpu in top_gpus:
-                        total_wattage = calculate_total_wattage(
-                            cpu,
-                            gpu,
-                            motherboard,
-                            ram,
-                            storage
-                        )
+                if psu is None:
+                    continue
 
-                        valid_psus = choose_valid_psus(total_wattage, psus, psu_limit)
+                total_price = (
+                    cpu.price
+                    + gpu.price
+                    + motherboard.price
+                    + ram.price
+                    + storage.price
+                    + psu.price
+                )
 
-                        if not valid_psus:
-                            continue
+                candidates.append({
+                    "cpu": cpu,
+                    "gpu": gpu,
+                    "psu": psu,
+                    "motherboard": motherboard,
+                    "ram": ram,
+                    "storage": storage,
+                    "core_price": (
+                        cpu.price
+                        + gpu.price
+                        + psu.price
+                    ),
+                    "supporting_price": package["price"],
+                    "estimated_total": total_price,
+                    "score": calculate_candidate_score(
+                        cpu,
+                        gpu
+                    )
+                })
 
-                        for psu in valid_psus:
-                            total_price = calculate_build_price(
-                                cpu,
-                                gpu,
-                                motherboard,
-                                ram,
-                                storage,
-                                psu
-                            )
+    return candidates
 
-                            if not is_build_in_budget_range(total_price, budget, budget_gap):
-                                continue
 
-                            build = PCBUILD()
-                            build.add_component(cpu)
-                            build.add_component(gpu)
-                            build.add_component(motherboard)
-                            build.add_component(ram)
-                            build.add_component(storage)
-                            build.add_component(psu)
+def choose_build_for_target(
+    candidates,
+    target_price,
+    minimum_price,
+    maximum_price
+):
+    """
+    used to select the strongest build near a target price
+    :param candidates: generated candidate builds
+    :param target_price: preferred price for the recommendation
+    :param minimum_price: lowest accepted price
+    :param maximum_price: highest accepted price
+    :return: selected candidate build or None
+    """
+    suitable_candidates = [
+        candidate
+        for candidate in candidates
+        if minimum_price
+        <= candidate["estimated_total"]
+        <= maximum_price
+    ]
 
-                            compatible_builds.append(build)
+    if not suitable_candidates:
+        return None
 
-    return compatible_builds
+    suitable_candidates.sort(
+        key=lambda candidate: (
+            abs(
+                candidate["estimated_total"]
+                - target_price
+            ),
+            -candidate["score"]
+        )
+    )
+
+    closest_distance = abs(
+        suitable_candidates[0]["estimated_total"]
+        - target_price
+    )
+
+    close_candidates = [
+        candidate
+        for candidate in suitable_candidates
+        if abs(
+            candidate["estimated_total"]
+            - target_price
+        ) <= closest_distance + 75
+    ]
+
+    close_candidates.sort(
+        key=lambda candidate: candidate["score"],
+        reverse=True
+    )
+
+    return close_candidates[0]
+
+
+def recommend_three_builds(
+    cpus,
+    gpus,
+    motherboards,
+    ram_list,
+    storage_list,
+    psus,
+    budget,
+    preferred_cpu_brand="Any",
+    preferred_gpu_brand="Any"
+):
+    """
+    used to return one value, one balanced and one performance build
+    :param budget: total budget entered by user
+    :return recommendations: three build recommendation dictionaries
+    """
+    candidates = generate_candidate_builds(
+        cpus,
+        gpus,
+        motherboards,
+        ram_list,
+        storage_list,
+        psus,
+        budget,
+        preferred_cpu_brand,
+        preferred_gpu_brand
+    )
+
+    value_build = choose_build_for_target(
+        candidates,
+        target_price=budget * 0.85,
+        minimum_price=budget * 0.75,
+        maximum_price=budget * 0.92
+    )
+
+    balanced_build = choose_build_for_target(
+        candidates,
+        target_price=budget * 0.98,
+        minimum_price=budget * 0.92,
+        maximum_price=budget * 1.02
+    )
+
+    performance_build = choose_build_for_target(
+        candidates,
+        target_price=budget * 1.08,
+        minimum_price=budget * 1.02,
+        maximum_price=budget * 1.12
+    )
+
+    recommendations = []
+
+    if value_build is not None:
+        value_build["type"] = "Value Build"
+        value_build["description"] = (
+            "A strong build that leaves some money below the budget."
+        )
+        recommendations.append(value_build)
+
+    if balanced_build is not None:
+        balanced_build["type"] = "Balanced Build"
+        balanced_build["description"] = (
+            "A build designed to use almost all of the selected budget."
+        )
+        recommendations.append(balanced_build)
+
+    if performance_build is not None:
+        performance_build["type"] = "Performance Build"
+        performance_build["description"] = (
+            "A stronger build slightly above budget that can be customised."
+        )
+        recommendations.append(performance_build)
+
+    return recommendations
+
+
+def find_compatible_motherboards(
+    cpu,
+    motherboards,
+    maximum_price
+):
+    """
+    used to find motherboards compatible with the selected CPU
+    """
+    options = [
+        motherboard
+        for motherboard in motherboards
+        if normalise_socket(motherboard.socket)
+        == normalise_socket(cpu.socket)
+        and motherboard.price <= maximum_price
+    ]
+
+    options.sort(
+        key=lambda motherboard: motherboard.price
+    )
+
+    return options
+
+
+def find_compatible_ram(
+    motherboard,
+    ram_list,
+    maximum_price
+):
+    """
+    used to find RAM compatible with the selected motherboard
+    """
+    options = [
+        ram
+        for ram in ram_list
+        if ram.ram_type == motherboard.ram_type
+        and ram.price <= maximum_price
+    ]
+
+    options.sort(
+        key=lambda ram: (
+            ram.size_gb,
+            ram.size_gb / ram.price
+        ),
+        reverse=True
+    )
+
+    return options
+
+
+def find_affordable_storage(
+    storage_list,
+    maximum_price
+):
+    """
+    used to find storage options below the provided price
+    """
+    options = [
+        storage
+        for storage in storage_list
+        if storage.price <= maximum_price
+    ]
+
+    options.sort(
+        key=lambda storage: (
+            storage.capacity_gb,
+            storage.capacity_gb / storage.price
+        ),
+        reverse=True
+    )
+
+    return options
+
+
+def final_build_is_compatible(
+    cpu,
+    gpu,
+    psu,
+    motherboard,
+    ram,
+    storage
+):
+    """
+    used to check compatibility and PSU wattage without rejecting an over-budget build
+    :return: Boolean value showing whether the selected components are compatible
+    """
+    if (
+        normalise_socket(cpu.socket)
+        != normalise_socket(motherboard.socket)
+    ):
+        return False
+
+    if motherboard.ram_type != ram.ram_type:
+        return False
+
+    total_wattage = calculate_total_wattage(
+        cpu,
+        gpu,
+        motherboard,
+        ram,
+        storage
+    )
+
+    return is_psu_compatible(total_wattage, psu)

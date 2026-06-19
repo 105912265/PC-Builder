@@ -1,0 +1,11 @@
+PC Build Summary
+----------------
+CPU_Name: AMD Ryzen 9 5900X, Price: $393.03, Wattage: 105W, CPU Mark: 39457, Single Thread Score: 3494, Power Performance: 375.78, Cores: 12, Socket: AM4
+GPU_Name: GeForce RTX 3070 Ti, Price: $749.99, Wattage: 290W, G3D Mark: 23367, G2D Mark: 1003, Power Efficiency: 80.58
+Motherboad_Name: MSI B550M PRO-VDH WiFi, Price: $149.0, Wattage: 40W, Socket: AM4, RAM Type: DDR4
+RAM_Name: Corsair Vengeance LPX 16GB DDR4, Price: $55.0, Wattage: 8W, Size: 16GB, RAM Type: DDR4
+Storage_Name: Kingston NV2 500GB NVMe SSD, Price: $45.0, Wattage: 5W, Capacity: 500GB, Type: NVMe
+PSU_Name: MSI MAG A650BN, Price: $99.0, Wattage: 650W, Efficiency: 80+ Bronze
+
+Total price: $1491.02
+Total wattage: 1098W
