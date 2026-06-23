@@ -1,11 +1,11 @@
 PC Build Summary
 ----------------
-CPU_Name: AMD Ryzen 9 5900X, Price: $393.03, Wattage: 105W, CPU Mark: 39457, Single Thread Score: 3494, Power Performance: 375.78, Cores: 12, Socket: AM4
-GPU_Name: GeForce RTX 3060 Ti, Price: $599.99, Wattage: 200W, G3D Mark: 20206, G2D Mark: 961, Power Efficiency: 101.03
-Motherboad_Name: ASUS TUF Gaming B550-PLUS WiFi II, Price: $219.0, Wattage: 45W, Socket: AM4, RAM Type: DDR4
-RAM_Name: G.Skill Ripjaws V 32GB DDR4, Price: $99.0, Wattage: 10W, Size: 32GB, RAM Type: DDR4
-Storage_Name: Kingston NV2 500GB NVMe SSD, Price: $45.0, Wattage: 5W, Capacity: 500GB, Type: NVMe
-PSU_Name: Corsair CV550, Price: $79.0, Wattage: 550W, Efficiency: 80+ Bronze
+CPU_Name: AMD Ryzen 9 5950X, Price: $649.74, Wattage: 105W, CPU Mark: 46195, Single Thread Score: 3498, Power Performance: 439.96, Cores: 16, Socket: AM4
+GPU_Name: GeForce RTX 3070 Ti, Price: $749.99, Wattage: 290W, G3D Mark: 23367, G2D Mark: 1003, Power Efficiency: 80.58
+Motherboad_Name: MSI B550M PRO-VDH WiFi, Price: $149.0, Wattage: 40W, Socket: AM4, RAM Type: DDR4
+RAM_Name: Kingston Fury Beast 16GB DDR4, Price: $59.0, Wattage: 8W, Size: 16GB, RAM Type: DDR4
+Storage_Name: Samsung 990 Pro 2TB NVMe SSD, Price: $249.0, Wattage: 8W, Capacity: 2000GB, Type: NVMe
+PSU_Name: MSI MAG A650BN, Price: $99.0, Wattage: 650W, Efficiency: 80+ Bronze
 
-Total price: $1435.02
-Total wattage: 915W
+Total price: $1955.73
+Total wattage: 1101W
